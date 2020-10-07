@@ -1,9 +1,11 @@
-﻿using IBA_Test_BLL.Models;
+﻿using IBA_Test_BLL.Interfaces;
+using IBA_Test_BLL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Routing;
 
@@ -11,30 +13,45 @@ namespace IBA_Test.Controllers
 {
     public class DriversController : ApiController
     {
+        private readonly IDriversService _driversService;
+
+        public DriversController(IDriversService driversService)
+        {
+            _driversService = driversService;
+        }
         [Route("drivers/datespeed")]
         [HttpPost]
-        public IHttpActionResult GetByDateAndSpeed([FromBody] DriverFilterViewModel model)
+        public async Task<IHttpActionResult> GetByDateAndSpeed([FromBody] DriverFilterViewModel model)
         {
             if (ModelState.IsValid)
-                return Ok(new List<DriverBLL>() { new DriverBLL { DateTime = model.DateTime, CarNumber = "1232 AP-7", Speed = 99.9f } });
+            {
+               var drivers = await _driversService.GetByDateAndSpeed(model.DateTime, model.Speed);
+               return Ok(drivers);
+            }
             else return BadRequest();
         }
 
         [Route("drivers/date")]
         [HttpPost]
-        public IHttpActionResult GetByDate([FromBody] DriverFilterViewModel model)
+        public async Task<IHttpActionResult> GetByDate([FromBody] DateTime dt)
         {
             if (ModelState.IsValid)
-                return Ok(new List<DriverBLL>() { new DriverBLL { DateTime = model.DateTime, CarNumber = "1232 AP-7", Speed = 99.9f } });
+            {
+                var drivers = await _driversService.GetByDateHigherAndLower(dt);
+                return Ok(drivers);
+            }
             else return BadRequest();
         }
 
         [Route("drivers")]
         [HttpPost]
-        public IHttpActionResult Add([FromBody] DriverBLL model)
+        public async Task<IHttpActionResult> Add([FromBody] DriverBLL model)
         {
             if (ModelState.IsValid)
+            {
+                await _driversService.Add(model);
                 return StatusCode(HttpStatusCode.NoContent);
+            }
             else return BadRequest();
         }
     }

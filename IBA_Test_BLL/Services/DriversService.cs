@@ -1,5 +1,8 @@
-﻿using IBA_Test_BLL.Interfaces;
+﻿using AutoMapper;
+using IBA_Test_BLL.Interfaces;
 using IBA_Test_BLL.Models;
+using IBA_Test_DAL.Interfaces;
+using IBA_Test_DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +13,27 @@ namespace IBA_Test_BLL.Services
 {
     internal class DriversService : IDriversService
     {
+        private readonly IDriverRepository _repository;
+        private readonly IMapper _mapper;
+
+        public DriversService(IDriverRepository repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
         public Task Add(DriverBLL model)
         {
-            throw new NotImplementedException();
+            return _repository.Add(_mapper.Map<DriverDAL>(model));
         }
 
-        public Task<IEnumerable<DriverBLL>> GetByDateAndSpeed(DateTime dt, float speed)
+        public async Task<IEnumerable<DriverBLL>> GetByDateAndSpeed(DateTime dt, float speed)
         {
-            throw new NotImplementedException();
+           return _mapper.Map<IEnumerable<DriverBLL>>(await _repository.GetAll()).Where(x => x.DateTime.Date == dt.Date && x.Speed > speed);
         }
 
-        public Task<IEnumerable<DriverBLL>> GetByDateHigherAndLower(DateTime dt)
+        public async Task<IEnumerable<DriverBLL>> GetByDateHigherAndLower(DateTime dt)
         {
-            throw new NotImplementedException();
+           return _mapper.Map<IEnumerable<DriverBLL>>(await _repository.GetAll()).Where(x => x.DateTime.Date == dt.Date);
         }
     }
 }
