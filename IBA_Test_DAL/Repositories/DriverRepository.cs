@@ -15,12 +15,7 @@ namespace IBA_Test_DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DriverDAL>> GetAllByDateAndSpeed(DriverDAL model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DriverDAL>> GetHigherAndLower(DriverDAL model)
+        public Task<IEnumerable<DriverDAL>> GetAll()
         {
             throw new NotImplementedException();
         }
