@@ -11,5 +11,12 @@ namespace IBA_Test_DAL.Models
         public string CarNumber { get; set; }
         public DateTime DateTime{ get; set; }
         public float Speed { get; set; }
+
+        public DriverDAL(string carNumber, DateTime dateTime, float speed)
+        {
+            CarNumber = carNumber;
+            DateTime = dateTime;
+            Speed = speed;
+        }
     }
 }

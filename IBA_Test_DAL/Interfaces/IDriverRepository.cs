@@ -10,6 +10,7 @@ namespace IBA_Test_DAL.Interfaces
     public interface IDriverRepository
     {
         Task Add(DriverDAL model);
-        Task<IEnumerable<DriverDAL>> GetAll();
+        Task<IEnumerable<DriverDAL>> GetByDateSpeed(DateTime dt, float speed);
+        Task<IEnumerable<DriverDAL>> GetByDate(DateTime dt);
     }
 }

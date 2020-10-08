@@ -28,12 +28,12 @@ namespace IBA_Test_BLL.Services
 
         public async Task<IEnumerable<DriverBLL>> GetByDateAndSpeed(DateTime dt, float speed)
         {
-           return _mapper.Map<IEnumerable<DriverBLL>>(await _repository.GetAll()).Where(x => x.DateTime.Date == dt.Date && x.Speed > speed);
+           return _mapper.Map<IEnumerable<DriverBLL>>(await _repository.GetByDateSpeed(dt, speed));
         }
-
+         
         public async Task<IEnumerable<DriverBLL>> GetByDateHigherAndLower(DateTime dt)
         {
-           return _mapper.Map<IEnumerable<DriverBLL>>(await _repository.GetAll()).Where(x => x.DateTime.Date == dt.Date);
+           return _mapper.Map<IEnumerable<DriverBLL>>(await _repository.GetByDate(dt));
         }
     }
 }
