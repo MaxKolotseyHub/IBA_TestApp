@@ -1,4 +1,5 @@
-﻿using IBA_Test_BLL.Models;
+﻿using CSharpFunctionalExtensions;
+using IBA_Test_BLL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace IBA_Test_BLL.Interfaces
 {
     public interface IDriversService
     {
-        Task Add(DriverBLL model);
-        Task<IEnumerable<DriverBLL>> GetByDateAndSpeed(DateTime dt, float speed);
-        Task<IEnumerable<DriverBLL>> GetByDateHigherAndLower(DateTime dt);
+        Task<Result> Add(DriverDTO model);
+        Task<Result<IEnumerable<DriverDTO>>> GetByDateAndSpeed(DateTime dt, float speed);
+        Task<Result<IEnumerable<DriverDTO>>> GetByDateHigherAndLower(DateTime dt);
     }
 }

@@ -20,42 +20,56 @@ namespace IBA_Test.Controllers
         {
             _driversService = driversService;
         }
+        /// <summary>
+        /// Получение выборки данных за определенную дату, со скоростью, превышающей заданную
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [AccessAction]
         [Route("drivers/datespeed")]
         [HttpPost]
-        public async Task<IHttpActionResult> GetByDateAndSpeed([FromBody] DriverFilterViewModel model)
+        public async Task<IHttpActionResult> GetByDateAndSpeed([FromBody] DriverFilterDTO model)
         {
             if (ModelState.IsValid)
             {
-               var drivers = await _driversService.GetByDateAndSpeed(model.DateTime, model.Speed);
-               return Ok(drivers);
+                var result = await _driversService.GetByDateAndSpeed(model.DateTime, model.Speed);
+                return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)BadRequest(result.Error);
             }
-            else return BadRequest();
+            else return BadRequest(ModelState);
         }
 
+        /// <summary>
+        /// Получение выборки данных с максимальной и минимальной скоростью за определенную дату
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [AccessAction]
         [Route("drivers/date")]
         [HttpPost]
-        public async Task<IHttpActionResult> GetByDate([FromBody] DateTime dt)
+        public async Task<IHttpActionResult> GetByDate([FromBody] DriverMinMaxFilterDTO model)
         {
             if (ModelState.IsValid)
             {
-                var drivers = await _driversService.GetByDateHigherAndLower(dt);
-                return Ok(drivers);
+                var result = await _driversService.GetByDateHigherAndLower(model.dt);
+                return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)BadRequest(result.Error);
             }
-            else return BadRequest();
+            else return BadRequest(ModelState);
         }
-
+        /// <summary>
+        /// Добавление информации 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("drivers")]
         [HttpPost]
-        public async Task<IHttpActionResult> Add([FromBody] DriverBLL model)
+        public async Task<IHttpActionResult> Add([FromBody] DriverDTO model)
         {
             if (ModelState.IsValid)
             {
-                await _driversService.Add(model);
-                return StatusCode(HttpStatusCode.NoContent);
+                var result = await _driversService.Add(model);
+                return result.IsSuccess ? StatusCode(HttpStatusCode.NoContent) : (IHttpActionResult)BadRequest(result.Error);
             }
-            else return BadRequest();
+            else return BadRequest(ModelState);
         }
     }
 }

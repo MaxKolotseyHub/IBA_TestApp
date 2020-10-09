@@ -49,6 +49,7 @@
     <Compile Include="Modules\MyModuleDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DriverRepository.cs" />
+    <Compile Include="Repositories\OneFileDriverRepository.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

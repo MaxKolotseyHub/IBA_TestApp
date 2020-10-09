@@ -19,7 +19,7 @@ namespace IBA_Test_BLL.Helpers
             {
                 var conf = new MapperConfiguration(cfg =>
                 {
-                    cfg.CreateMap<DriverBLL, DriverDAL>().ReverseMap();
+                    cfg.CreateMap<DriverDTO, DriverDAL>().ReverseMap();
                 });
 
                 mapper = new Mapper(conf);

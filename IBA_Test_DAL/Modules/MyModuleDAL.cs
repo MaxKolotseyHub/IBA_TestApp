@@ -13,7 +13,7 @@ namespace IBA_Test_DAL.Modules
     {
         public override void Load()
         {
-            Kernel.Bind<IDriverRepository>().To<DriverRepository>();
+            Kernel.Bind<IDriverRepository>().To<OneFileDriverRepository>();
         }
     }
 }
