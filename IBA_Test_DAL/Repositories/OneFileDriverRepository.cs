@@ -24,7 +24,9 @@ namespace IBA_Test_DAL.Repositories
         }
         public async Task Add(DriverDAL model)
         {
-            await CheckDBExistsAndCreateAsync();
+            if(!CheckDBExists())
+            await CreateTableAsync();
+            //await CheckDBExistsAndCreateAsync();
             await InsertAsync(model);
         }
 
@@ -64,15 +66,26 @@ namespace IBA_Test_DAL.Repositories
             }
         }
 
+        private async Task CreateTableAsync()
+        {
+            using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + _directoryPath + @";Extended Properties=text"))
+            {
+                string commandStr = $"CREATE TABLE [{_fileName}] ([Date] DateTime,[Speed] DOUBLE,[Number] TEXT)";
+                OleDbCommand command = new OleDbCommand(commandStr, connection);
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+                connection.Close();
+            }
+        }
         private async Task InsertAsync(DriverDAL model)
         {
-            using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + _directoryPath+ @";Extended Properties=text"))
+            using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + _directoryPath + @";Extended Properties=text"))
             {
                 string commandStr = $"INSERT INTO [{_fileName}] ([Date],[Speed],[Number]) values (@date, @speed, @number)";
                 OleDbCommand command = new OleDbCommand(commandStr, connection);
-                command.Parameters.AddWithValue("@date", model.DateTime);
-                command.Parameters.AddWithValue("@speed", model.Speed);
-                command.Parameters.AddWithValue("@number", model.CarNumber);
+                command.Parameters.AddWithValue("@date", model.DateTime).OleDbType = OleDbType.Date;
+                command.Parameters.AddWithValue("@speed", model.Speed).OleDbType = OleDbType.Double;
+                command.Parameters.AddWithValue("@number", model.CarNumber).OleDbType = OleDbType.LongVarChar;
                 await connection.OpenAsync();
                 await command.ExecuteNonQueryAsync();
                 connection.Close();
@@ -85,8 +98,9 @@ namespace IBA_Test_DAL.Repositories
 
             using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + _directoryPath + ";Extended Properties=text"))
             {
-                string commandStr = $"SELECT * FROM [{_fileName}] WHERE Speed > {speed} AND Date LIKE '{dt.ToString("yyyy-MM-dd")}%'";
+                string commandStr = $"SELECT * FROM [{_fileName}] WHERE Speed > @speed AND Date BETWEEN #{dt.ToString("MM/dd/yyyy")} 00:00:00# AND #{dt.ToString("MM/dd/yyyy")} 23:59:59#";
                 OleDbCommand command = new OleDbCommand(commandStr, connection);
+                command.Parameters.AddWithValue("@speed", speed).OleDbType = OleDbType.Double;
                 await connection.OpenAsync();
                 var reader = await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
@@ -105,7 +119,7 @@ namespace IBA_Test_DAL.Repositories
 
             using (OleDbConnection connection = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + _directoryPath + ";Extended Properties=text"))
             {
-                string commandStr = $"SELECT * FROM [{_fileName}] WHERE Speed = (Select MIN(Speed) from [{_fileName}]  where Date LIKE '{dt.ToString("yyyy-MM-dd")}%')  OR Speed = (Select MAX(Speed) from [{_fileName}] where Date LIKE '{dt.ToString("yyyy-MM-dd")}%')";
+                string commandStr = $"SELECT * FROM [{_fileName}] WHERE Speed = (Select MIN(Speed) from [{_fileName}]  where  Date BETWEEN #{dt.ToString("MM/dd/yyyy")} 00:00:00# AND #{dt.ToString("MM/dd/yyyy")} 23:59:59#)  OR Speed = (Select MAX(Speed) from [{_fileName}] where  Date BETWEEN #{dt.ToString("MM/dd/yyyy")} 00:00:00# AND #{dt.ToString("MM/dd/yyyy")} 23:59:59#)";
                 OleDbCommand command = new OleDbCommand(commandStr, connection);
                 await connection.OpenAsync();
                 var reader = command.ExecuteReader();
