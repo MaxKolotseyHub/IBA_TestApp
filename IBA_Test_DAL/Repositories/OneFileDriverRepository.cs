@@ -24,9 +24,7 @@ namespace IBA_Test_DAL.Repositories
         }
         public async Task Add(DriverDAL model)
         {
-            if(!CheckDBExists())
-            await CreateTableAsync();
-            //await CheckDBExistsAndCreateAsync();
+            await CheckDBExistsAndCreateAsync();
             await InsertAsync(model);
         }
 
@@ -48,22 +46,14 @@ namespace IBA_Test_DAL.Repositories
         {
             return File.Exists(_fullPath);
         }
-        
+
         private async Task CheckDBExistsAndCreateAsync()
         {
             if (!Directory.Exists(_directoryPath))
                 Directory.CreateDirectory(_directoryPath);
 
             if (!File.Exists(_fullPath))
-                await CreateDbFileAsync();
-        }
-
-        private async Task CreateDbFileAsync()
-        {
-            using(StreamWriter sw = new StreamWriter(_fullPath, true, Encoding.GetEncoding(1251)))
-            {
-                await sw.WriteLineAsync("\"Date\", \"Speed\", \"Number\"");
-            }
+                await CreateTableAsync();
         }
 
         private async Task CreateTableAsync()
@@ -131,7 +121,7 @@ namespace IBA_Test_DAL.Repositories
                 connection.Close();
             }
 
-            return drivers.OrderBy(x=>x.Speed);
+            return drivers.OrderBy(x => x.Speed);
         }
 
     }
