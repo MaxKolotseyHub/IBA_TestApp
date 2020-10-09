@@ -1,4 +1,5 @@
-﻿using IBA_Test_BLL.Interfaces;
+﻿using IBA_Test.Filters;
+using IBA_Test_BLL.Interfaces;
 using IBA_Test_BLL.Models;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace IBA_Test.Controllers
         {
             _driversService = driversService;
         }
+        [AccessAction]
         [Route("drivers/datespeed")]
         [HttpPost]
         public async Task<IHttpActionResult> GetByDateAndSpeed([FromBody] DriverFilterViewModel model)
@@ -31,6 +33,7 @@ namespace IBA_Test.Controllers
             else return BadRequest();
         }
 
+        [AccessAction]
         [Route("drivers/date")]
         [HttpPost]
         public async Task<IHttpActionResult> GetByDate([FromBody] DateTime dt)
