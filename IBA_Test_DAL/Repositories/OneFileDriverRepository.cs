@@ -32,14 +32,14 @@ namespace IBA_Test_DAL.Repositories
         {
             if (CheckDBExists())
                 return await SelectMinMaxByDate(dt);
-            else throw new IOException();
+            else return new List<DriverDAL>();
         }
 
         public async Task<IEnumerable<DriverDAL>> GetByDateSpeed(DateTime dt, float speed)
         {
             if (CheckDBExists())
                 return await SelectByDateSpeed(dt, speed);
-            else throw new IOException();
+            else return new List<DriverDAL>();
         }
 
         private bool CheckDBExists()

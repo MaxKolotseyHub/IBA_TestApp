@@ -35,10 +35,6 @@ namespace IBA_Test_BLL.Services
             {
                 return Result.Failure<IEnumerable<DriverDTO>>(e.Message);
             }
-            catch (IOException e)
-            {
-                return Result.Failure<IEnumerable<DriverDTO>>(e.Message);
-            }
         }
 
         public async Task<Result<IEnumerable<DriverDTO>>> GetByDateAndSpeed(DateTime dt, float speed)
@@ -52,10 +48,6 @@ namespace IBA_Test_BLL.Services
             {
                 return Result.Failure<IEnumerable<DriverDTO>>(e.Message);
             }
-            catch (IOException e)
-            {
-                return Result.Failure<IEnumerable<DriverDTO>>(e.Message);
-            }
         }
 
         public async Task<Result<IEnumerable<DriverDTO>>> GetByDateHigherAndLower(DateTime dt)
@@ -66,9 +58,6 @@ namespace IBA_Test_BLL.Services
                 return Result.Success(drivers);
             }
             catch (OleDbException e)
-            {
-                return Result.Failure<IEnumerable<DriverDTO>>(e.Message);
-            }catch(IOException e)
             {
                 return Result.Failure<IEnumerable<DriverDTO>>(e.Message);
             }
