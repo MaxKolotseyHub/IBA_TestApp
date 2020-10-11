@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\FileDb.cs" />
     <Compile Include="Interfaces\IDriverRepository.cs" />
     <Compile Include="Models\DriverDAL.cs" />
     <Compile Include="Modules\MyModuleDAL.cs" />

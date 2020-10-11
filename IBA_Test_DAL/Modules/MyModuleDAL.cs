@@ -1,4 +1,5 @@
-﻿using IBA_Test_DAL.Interfaces;
+﻿using IBA_Test_DAL.Data;
+using IBA_Test_DAL.Interfaces;
 using IBA_Test_DAL.Repositories;
 using Ninject.Modules;
 using System;
@@ -13,6 +14,7 @@ namespace IBA_Test_DAL.Modules
     {
         public override void Load()
         {
+            Kernel.Bind<FileDb>().ToSelf();
             Kernel.Bind<IDriverRepository>().To<OneFileDriverRepository>();
         }
     }
